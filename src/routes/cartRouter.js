@@ -8,8 +8,6 @@ const container = new Container("products.json");
 const Cart = require("../../Cart");
 const cart = new Cart("cart.json");
 
-let admin = true;
-
 router.get("/", async (req, res) => {
   res.send(await cart.getCart());
 });
