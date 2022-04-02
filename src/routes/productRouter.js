@@ -7,27 +7,37 @@ const container = new Container("products.json");
 
 let admin = true;
 
-if (admin) {
-  router.post("/", async (req, res) => {
-    res.send(await container.save(req.body));
-  });
+router.post("/", async (req, res) => {
+  admin
+    ? res.send(await container.save(req.body))
+    : { error: -1, descripcion: "/api/products método post no autorizada" };
+});
 
-  router.put("/:id", async (req, res) => {
-    let product = await container.getById(req.params.id);
+router.put("/:id", async (req, res) => {
+  let product = await container.getById(req.params.id);
 
-    product.title = req.body.title;
-    product.price = req.body.price;
-    product.thumbnail = req.body.thumbnail;
-    product.code = req.body.code;
-    product.description = req.body.description;
+  product.title = req.body.title;
+  product.price = req.body.price;
+  product.thumbnail = req.body.thumbnail;
+  product.code = req.body.code;
+  product.description = req.body.description;
 
-    res.json(await container.updateProduct(product, req.params.id));
-  });
+  admin
+    ? res.json(await container.updateProduct(product, req.params.id))
+    : {
+        error: -1,
+        descripcion: "/api/products/:id método put no autorizada",
+      };
+});
 
-  router.delete("/:id", async (req, res) => {
-    res.json(await container.deleteById(req.params.id));
-  });
-}
+router.delete("/:id", async (req, res) => {
+  admin
+    ? res.json(await container.deleteById(req.params.id))
+    : {
+        error: -1,
+        descripcion: "/api/products/id método delete no autorizada",
+      };
+});
 
 router.get("/:id?", async (req, res) => {
   req.params.id

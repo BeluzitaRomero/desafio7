@@ -1,5 +1,3 @@
-const { urlToHttpOptions } = require("url");
-
 const fs = require("fs").promises;
 
 class Cart {
